@@ -1,0 +1,6 @@
+going to device manager
+looking for Stellaris ICDI entries (I believe there are 3 of them)
+right click and select update driver
+point it to <your ccs install dir>\ccsv5\ccs_base\emulation\drivers\stellaris
+It should find and install the correct driver
+repeat for the other 2

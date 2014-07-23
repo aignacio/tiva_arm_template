@@ -1,0 +1,3 @@
+Add this to the top of the code for the arm-non-eabi compiler accept without errors:
+#define	PART_TM4C123GH6PM
+#define	TARGET_IS_BLIZZARD_RB1
