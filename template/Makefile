@@ -118,7 +118,7 @@ clean:
 	rm *.bin *.o *.d *.axf *.lst
 
 # Rule to load the project to the board (sudo may be needed if rule is note made).
-load:
+flash:
 	@echo Loading the ${PROJECT_NAME}.bin
 	${FLASHER} ${PROJECT_NAME}.bin ${FLASHER_FLAGS}
 
