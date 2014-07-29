@@ -33,57 +33,106 @@
 void ADCIntHandler(void)
 {
 	uint32_t	adc_ch[1];
-    //uint8_t     loop;
+    uint16_t    ad_value=0;
+    uint8_t     dist[5];
 
 	ADCIntClear(ADC0_BASE, 3);
 
 	// Read ADC Value.
 	ADCSequenceDataGet(ADC0_BASE, 3, adc_ch);
     
-    // switch(adc_ch[0])
-    // {
-    //     case:
-    //     break;
-    //     case:
-    //     break;
-    //     case:
-    //     break;
-    //     case:
-    //     break;
+    goto_lcd(1,1);
+    lcd_string("       ");
+    
+    ad_value=adc_ch[0];
 
-    //     case:
-    //     break;
-    //     case:
-    //     break;
-    //     case:
-    //     break;
-    //     case:
-    //     break;
+    if(ad_value<50)
+    {
+        goto_lcd(1,1);
+        lcd_string("Key 0");
+    }
+    else if(ad_value>220 && ad_value<300)
+        {
+            goto_lcd(1,1);
+            lcd_string("Key 1");
+        }
+        else if(ad_value>450 && ad_value<550)
+            {
+                goto_lcd(1,1);
+                lcd_string("Key 2");
+            }
+            else if(ad_value>700 && ad_value<800)
+                {
+                    goto_lcd(1,1);
+                    lcd_string("Key 3");
+                }
+                else if(ad_value>900 && ad_value<1100)
+                    {
+                        goto_lcd(1,1);
+                        lcd_string("Key 4");
+                    }
+                    else if(ad_value>1200 && ad_value<1300)
+                        {
+                            goto_lcd(1,1);
+                            lcd_string("Key 5");
+                        }
+                        else if(ad_value>1400 && ad_value<1500)
+                            {
+                                goto_lcd(1,1);
+                                lcd_string("Key 6");
+                            }
+                            else if(ad_value>1600 && ad_value<1700)
+                                {
+                                    goto_lcd(1,1);
+                                    lcd_string("Key 7");
+                                }
+                                else if(ad_value>1900 && ad_value<2000)
+                                    {
+                                        goto_lcd(1,1);
+                                        lcd_string("Key 8");
+                                    }
+                                    else if(ad_value>2100 && ad_value<2200)
+                                        {
+                                            goto_lcd(1,1);
+                                            lcd_string("Key 9");
+                                        }
+                                        else if(ad_value>2300 && ad_value<2400)
+                                            {
+                                                goto_lcd(1,1);
+                                                lcd_string("Key 10");
+                                            }
+                                            else if(ad_value>2500 && ad_value<2650)
+                                                {
+                                                    goto_lcd(1,1);
+                                                    lcd_string("Key 11");
+                                                }
+                                                else if(ad_value>2800 && ad_value<2900)
+                                                    {
+                                                        goto_lcd(1,1);
+                                                        lcd_string("Key 12");
+                                                    }
+                                                    else if(ad_value>3000 && ad_value<3100)
+                                                        {
+                                                            goto_lcd(1,1);
+                                                            lcd_string("Key 13");
+                                                        }
+                                                        else if(ad_value>3300 && ad_value<3400)
+                                                            {
+                                                                goto_lcd(1,1);
+                                                                lcd_string("Key 14");
+                                                            }
+                                                            else if(ad_value>3500 && ad_value<3600)
+                                                                {
+                                                                    goto_lcd(1,1);
+                                                                    lcd_string("Key 15");
+                                                                }
 
-    //     case:
-    //     break;
-    //     case:
-    //     break;
-    //     case:
-    //     break;
-    //     case:
-    //     break;
 
-    //     case:
-    //     break;
-    //     case:
-    //     break;
-    //     case:
-    //     break;
-    //     case:
-    //     break;
-        
-    //     default:
-    //     break;
-    // }
+
+
 
     UARTprintf("                                            ");
-	UARTprintf("\rAD value of channel 1-PIN PE2:%d",adc_ch[0]);
+    UARTprintf("\rAD value of channel 0-PIN PE3:%d",adc_ch[0]);
 }
 
 void cfg_adc()
