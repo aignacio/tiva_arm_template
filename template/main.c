@@ -4,20 +4,20 @@
 //
 // Copyright (c) 2012-2014 Texas Instruments Incorporated.  All rights reserved.
 // Software License Agreement
-// 
+//
 // Texas Instruments (TI) is supplying this software for use solely and
 // exclusively on TI's microcontroller products. The software is owned by
 // TI and/or its suppliers, and is protected under applicable copyright
 // laws. You may not combine this software with "viral" open-source
 // software in order to form a larger program.
-// 
+//
 // THIS SOFTWARE IS PROVIDED "AS IS" AND WITH ALL FAULTS.
 // NO WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT
 // NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
 // A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE. TI SHALL NOT, UNDER ANY
 // CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
 // DAMAGES, FOR ANY REASON WHATSOEVER.
-// 
+//
 // This is part of revision 2.1.0.12573 of the EK-TM4C123GXL Firmware Package.
 //
 //*****************************************************************************
@@ -59,8 +59,8 @@ main(void)
     // Enable the GPIO pin for the LED (PF3).  Set the direction as output, and
     // enable the GPIO pin for digital function.
     //
-    GPIO_PORTF_DIR_R = 0x08;
-    GPIO_PORTF_DEN_R = 0x08;
+    GPIO_PORTF_DIR_R = 0x04;
+    GPIO_PORTF_DEN_R = 0x04;
 
     //
     // Loop forever.
@@ -70,7 +70,7 @@ main(void)
         //
         // Turn on the LED.
         //
-        GPIO_PORTF_DATA_R |= 0x08;
+        GPIO_PORTF_DATA_R |= 0x04;
 
         //
         // Delay for a bit.
@@ -82,7 +82,7 @@ main(void)
         //
         // Turn off the LED.
         //
-        GPIO_PORTF_DATA_R &= ~(0x08);
+        GPIO_PORTF_DATA_R &= ~(0x04);
 
         //
         // Delay for a bit.
