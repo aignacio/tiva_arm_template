@@ -1,0 +1,456 @@
+
+main.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <myvectors>:
+   0:	ff 7f 00 20 f1 02 00 00 e5 02 00 00 e9 02 00 00     ... ............
+  10:	ed 02 00 00 ed 02 00 00 ed 02 00 00 00 00 00 00     ................
+	...
+  2c:	ed 02 00 00 ed 02 00 00 00 00 00 00 ed 02 00 00     ................
+  3c:	ed 02 00 00 ed 02 00 00 ed 02 00 00 ed 02 00 00     ................
+  4c:	ed 02 00 00 ed 02 00 00 ed 02 00 00 ed 02 00 00     ................
+  5c:	ed 02 00 00 ed 02 00 00 00 00 00 00 00 00 00 00     ................
+	...
+  78:	ed 02 00 00 ed 02 00 00 ed 02 00 00 ed 02 00 00     ................
+  88:	ed 02 00 00 ed 02 00 00 ed 02 00 00 ed 02 00 00     ................
+  98:	ed 02 00 00 ed 02 00 00 ed 02 00 00 ed 02 00 00     ................
+  a8:	ed 02 00 00 00 00 00 00 ed 02 00 00 ed 02 00 00     ................
+  b8:	ed 02 00 00 00 00 00 00 00 00 00 00 ed 02 00 00     ................
+  c8:	ed 02 00 00 ed 02 00 00 ed 02 00 00 ed 02 00 00     ................
+  d8:	00 00 00 00 ed 02 00 00 00 00 00 00 00 00 00 00     ................
+  e8:	00 00 00 00 ed 02 00 00 ed 02 00 00 00 00 00 00     ................
+  f8:	ed 02 00 00 ed 02 00 00 ed 02 00 00 ed 02 00 00     ................
+ 108:	ed 02 00 00 ed 02 00 00 00 00 00 00 00 00 00 00     ................
+	...
+ 124:	ed 02 00 00 ed 02 00 00 ed 02 00 00 ed 02 00 00     ................
+ 134:	ed 02 00 00 ed 02 00 00 ed 02 00 00 00 00 00 00     ................
+	...
+ 150:	ed 02 00 00 ed 02 00 00 ed 02 00 00 ed 02 00 00     ................
+	...
+ 1b0:	ed 02 00 00 ed 02 00 00 ed 02 00 00 ed 02 00 00     ................
+ 1c0:	ed 02 00 00 ed 02 00 00 ed 02 00 00 ed 02 00 00     ................
+ 1d0:	ed 02 00 00 ed 02 00 00 ed 02 00 00 ed 02 00 00     ................
+ 1e0:	ed 02 00 00 ed 02 00 00 ed 02 00 00 00 00 00 00     ................
+	...
+
+0000026c <main>:
+// Blink the on-board LED.
+//
+//*****************************************************************************
+int
+main(void)
+{
+ 26c:	b430      	push	{r4, r5}
+    volatile uint32_t ui32Loop;
+
+    //
+    // Enable the GPIO port that is used for the on-board LED.
+    //
+    SYSCTL_RCGC2_R = SYSCTL_RCGC2_GPIOF;
+ 26e:	f24e 1308 	movw	r3, #57608	; 0xe108
+ 272:	f2c4 030f 	movt	r3, #16399	; 0x400f
+ 276:	2220      	movs	r2, #32
+ 278:	601a      	str	r2, [r3, #0]
+
+    //
+    // Enable the GPIO pin for the LED (PF3).  Set the direction as output, and
+    // enable the GPIO pin for digital function.
+    //
+    GPIO_PORTF_DIR_R = 0x04;
+ 27a:	f44f 44a8 	mov.w	r4, #21504	; 0x5400
+    GPIO_PORTF_DEN_R = 0x04;
+ 27e:	f245 501c 	movw	r0, #21788	; 0x551c
+    SYSCTL_RCGC2_R = SYSCTL_RCGC2_GPIOF;
+
+    //
+    // Do a dummy read to insert a few cycles after enabling the peripheral.
+    //
+    ui32Loop = SYSCTL_RCGC2_R;
+ 282:	681d      	ldr	r5, [r3, #0]
+    //
+    // Enable the GPIO pin for the LED (PF3).  Set the direction as output, and
+    // enable the GPIO pin for digital function.
+    //
+    GPIO_PORTF_DIR_R = 0x04;
+    GPIO_PORTF_DEN_R = 0x04;
+ 284:	f2c4 0002 	movt	r0, #16386	; 0x4002
+// Blink the on-board LED.
+//
+//*****************************************************************************
+int
+main(void)
+{
+ 288:	b082      	sub	sp, #8
+
+    //
+    // Enable the GPIO pin for the LED (PF3).  Set the direction as output, and
+    // enable the GPIO pin for digital function.
+    //
+    GPIO_PORTF_DIR_R = 0x04;
+ 28a:	f2c4 0402 	movt	r4, #16386	; 0x4002
+ 28e:	2304      	movs	r3, #4
+    while(1)
+    {
+        //
+        // Turn on the LED.
+        //
+        GPIO_PORTF_DATA_R |= 0x04;
+ 290:	f245 31fc 	movw	r1, #21500	; 0x53fc
+
+        //
+        // Delay for a bit.
+        //
+        for(ui32Loop = 0; ui32Loop < 200000; ui32Loop++)
+ 294:	f640 523f 	movw	r2, #3391	; 0xd3f
+    SYSCTL_RCGC2_R = SYSCTL_RCGC2_GPIOF;
+
+    //
+    // Do a dummy read to insert a few cycles after enabling the peripheral.
+    //
+    ui32Loop = SYSCTL_RCGC2_R;
+ 298:	9501      	str	r5, [sp, #4]
+    while(1)
+    {
+        //
+        // Turn on the LED.
+        //
+        GPIO_PORTF_DATA_R |= 0x04;
+ 29a:	f2c4 0102 	movt	r1, #16386	; 0x4002
+
+    //
+    // Enable the GPIO pin for the LED (PF3).  Set the direction as output, and
+    // enable the GPIO pin for digital function.
+    //
+    GPIO_PORTF_DIR_R = 0x04;
+ 29e:	6023      	str	r3, [r4, #0]
+        GPIO_PORTF_DATA_R |= 0x04;
+
+        //
+        // Delay for a bit.
+        //
+        for(ui32Loop = 0; ui32Loop < 200000; ui32Loop++)
+ 2a0:	f2c0 0203 	movt	r2, #3
+    //
+    // Enable the GPIO pin for the LED (PF3).  Set the direction as output, and
+    // enable the GPIO pin for digital function.
+    //
+    GPIO_PORTF_DIR_R = 0x04;
+    GPIO_PORTF_DEN_R = 0x04;
+ 2a4:	6003      	str	r3, [r0, #0]
+        GPIO_PORTF_DATA_R |= 0x04;
+
+        //
+        // Delay for a bit.
+        //
+        for(ui32Loop = 0; ui32Loop < 200000; ui32Loop++)
+ 2a6:	2000      	movs	r0, #0
+    while(1)
+    {
+        //
+        // Turn on the LED.
+        //
+        GPIO_PORTF_DATA_R |= 0x04;
+ 2a8:	680b      	ldr	r3, [r1, #0]
+ 2aa:	f043 0304 	orr.w	r3, r3, #4
+ 2ae:	600b      	str	r3, [r1, #0]
+
+        //
+        // Delay for a bit.
+        //
+        for(ui32Loop = 0; ui32Loop < 200000; ui32Loop++)
+ 2b0:	9001      	str	r0, [sp, #4]
+ 2b2:	9b01      	ldr	r3, [sp, #4]
+ 2b4:	4293      	cmp	r3, r2
+ 2b6:	d805      	bhi.n	2c4 <main+0x58>
+ 2b8:	9b01      	ldr	r3, [sp, #4]
+ 2ba:	3301      	adds	r3, #1
+ 2bc:	9301      	str	r3, [sp, #4]
+ 2be:	9b01      	ldr	r3, [sp, #4]
+ 2c0:	4293      	cmp	r3, r2
+ 2c2:	d9f9      	bls.n	2b8 <main+0x4c>
+        }
+
+        //
+        // Turn off the LED.
+        //
+        GPIO_PORTF_DATA_R &= ~(0x04);
+ 2c4:	680b      	ldr	r3, [r1, #0]
+ 2c6:	f023 0304 	bic.w	r3, r3, #4
+ 2ca:	600b      	str	r3, [r1, #0]
+
+        //
+        // Delay for a bit.
+        //
+        for(ui32Loop = 0; ui32Loop < 200000; ui32Loop++)
+ 2cc:	9001      	str	r0, [sp, #4]
+ 2ce:	9b01      	ldr	r3, [sp, #4]
+ 2d0:	4293      	cmp	r3, r2
+ 2d2:	d8e9      	bhi.n	2a8 <main+0x3c>
+ 2d4:	9b01      	ldr	r3, [sp, #4]
+ 2d6:	3301      	adds	r3, #1
+ 2d8:	9301      	str	r3, [sp, #4]
+ 2da:	9b01      	ldr	r3, [sp, #4]
+ 2dc:	4293      	cmp	r3, r2
+ 2de:	d9f9      	bls.n	2d4 <main+0x68>
+ 2e0:	e7e2      	b.n	2a8 <main+0x3c>
+ 2e2:	bf00      	nop
+
+000002e4 <nmi_handler>:
+	// There you go!
+	main();
+}
+
+// NMI Exception handler code NVIC 2
+void nmi_handler(void){
+ 2e4:	e7fe      	b.n	2e4 <nmi_handler>
+ 2e6:	bf00      	nop
+
+000002e8 <hardfault_handler>:
+    while(1){
+    }
+}
+
+// Hard fault handler code NVIC 3
+void hardfault_handler(void){
+ 2e8:	e7fe      	b.n	2e8 <hardfault_handler>
+ 2ea:	bf00      	nop
+
+000002ec <empty_def_handler>:
+    while(1){
+    }
+}
+
+// Empty handler used as default.
+void empty_def_handler(void){
+ 2ec:	e7fe      	b.n	2ec <empty_def_handler>
+ 2ee:	bf00      	nop
+
+000002f0 <rst_handler>:
+* The stack pointer should be set at the beginning with the NVIC table already.
+* Copy the .data segment from flash into ram.
+* 0 to the .bss segment 
+*/
+	
+void rst_handler(void){	
+ 2f0:	b508      	push	{r3, lr}
+	//this should be good!
+	src = &_end_text;
+	dest = &_start_data;
+	
+	//this too
+    while(dest < &_end_data)
+ 2f2:	f240 0000 	movw	r0, #0
+ 2f6:	f240 0300 	movw	r3, #0
+ 2fa:	f2c2 0000 	movt	r0, #8192	; 0x2000
+ 2fe:	f2c2 0300 	movt	r3, #8192	; 0x2000
+ 302:	4298      	cmp	r0, r3
+ 304:	d20a      	bcs.n	31c <rst_handler+0x2c>
+    {
+        *dest++ = *src++;
+ 306:	43c2      	mvns	r2, r0
+ 308:	4413      	add	r3, r2
+ 30a:	f023 0203 	bic.w	r2, r3, #3
+ 30e:	f240 31dc 	movw	r1, #988	; 0x3dc
+ 312:	3204      	adds	r2, #4
+ 314:	f2c0 0100 	movt	r1, #0
+ 318:	f000 f860 	bl	3dc <memcpy>
+    }
+	
+    // now set the .bss segment to 0!
+    dest = &_start_bss;
+	while(dest < &_end_bss){
+ 31c:	f240 0000 	movw	r0, #0
+ 320:	f240 0300 	movw	r3, #0
+ 324:	f2c2 0000 	movt	r0, #8192	; 0x2000
+ 328:	f2c2 0300 	movt	r3, #8192	; 0x2000
+ 32c:	4298      	cmp	r0, r3
+ 32e:	d207      	bcs.n	340 <rst_handler+0x50>
+		*dest++ = 0;
+ 330:	43c2      	mvns	r2, r0
+ 332:	4413      	add	r3, r2
+ 334:	f023 0203 	bic.w	r2, r3, #3
+ 338:	3204      	adds	r2, #4
+ 33a:	2100      	movs	r1, #0
+ 33c:	f000 f804 	bl	348 <memset>
+	
+	// after setting copying .data to ram and "zero-ing" .bss we are good
+	// to start the main() method!
+	// There you go!
+	main();
+}
+ 340:	e8bd 4008 	ldmia.w	sp!, {r3, lr}
+	}
+	
+	// after setting copying .data to ram and "zero-ing" .bss we are good
+	// to start the main() method!
+	// There you go!
+	main();
+ 344:	f7ff bf92 	b.w	26c <main>
+
+00000348 <memset>:
+ 348:	b4f0      	push	{r4, r5, r6, r7}
+ 34a:	0784      	lsls	r4, r0, #30
+ 34c:	d043      	beq.n	3d6 <memset+0x8e>
+ 34e:	1e54      	subs	r4, r2, #1
+ 350:	2a00      	cmp	r2, #0
+ 352:	d03e      	beq.n	3d2 <memset+0x8a>
+ 354:	b2cd      	uxtb	r5, r1
+ 356:	4603      	mov	r3, r0
+ 358:	e003      	b.n	362 <memset+0x1a>
+ 35a:	1e62      	subs	r2, r4, #1
+ 35c:	2c00      	cmp	r4, #0
+ 35e:	d038      	beq.n	3d2 <memset+0x8a>
+ 360:	4614      	mov	r4, r2
+ 362:	f803 5b01 	strb.w	r5, [r3], #1
+ 366:	079a      	lsls	r2, r3, #30
+ 368:	d1f7      	bne.n	35a <memset+0x12>
+ 36a:	2c03      	cmp	r4, #3
+ 36c:	d92a      	bls.n	3c4 <memset+0x7c>
+ 36e:	b2cd      	uxtb	r5, r1
+ 370:	ea45 2505 	orr.w	r5, r5, r5, lsl #8
+ 374:	2c0f      	cmp	r4, #15
+ 376:	ea45 4505 	orr.w	r5, r5, r5, lsl #16
+ 37a:	d915      	bls.n	3a8 <memset+0x60>
+ 37c:	f1a4 0710 	sub.w	r7, r4, #16
+ 380:	093f      	lsrs	r7, r7, #4
+ 382:	f103 0610 	add.w	r6, r3, #16
+ 386:	eb06 1607 	add.w	r6, r6, r7, lsl #4
+ 38a:	461a      	mov	r2, r3
+ 38c:	6015      	str	r5, [r2, #0]
+ 38e:	6055      	str	r5, [r2, #4]
+ 390:	6095      	str	r5, [r2, #8]
+ 392:	60d5      	str	r5, [r2, #12]
+ 394:	3210      	adds	r2, #16
+ 396:	42b2      	cmp	r2, r6
+ 398:	d1f8      	bne.n	38c <memset+0x44>
+ 39a:	f004 040f 	and.w	r4, r4, #15
+ 39e:	3701      	adds	r7, #1
+ 3a0:	2c03      	cmp	r4, #3
+ 3a2:	eb03 1307 	add.w	r3, r3, r7, lsl #4
+ 3a6:	d90d      	bls.n	3c4 <memset+0x7c>
+ 3a8:	461e      	mov	r6, r3
+ 3aa:	4622      	mov	r2, r4
+ 3ac:	3a04      	subs	r2, #4
+ 3ae:	2a03      	cmp	r2, #3
+ 3b0:	f846 5b04 	str.w	r5, [r6], #4
+ 3b4:	d8fa      	bhi.n	3ac <memset+0x64>
+ 3b6:	1f22      	subs	r2, r4, #4
+ 3b8:	f022 0203 	bic.w	r2, r2, #3
+ 3bc:	3204      	adds	r2, #4
+ 3be:	4413      	add	r3, r2
+ 3c0:	f004 0403 	and.w	r4, r4, #3
+ 3c4:	b12c      	cbz	r4, 3d2 <memset+0x8a>
+ 3c6:	b2c9      	uxtb	r1, r1
+ 3c8:	441c      	add	r4, r3
+ 3ca:	f803 1b01 	strb.w	r1, [r3], #1
+ 3ce:	42a3      	cmp	r3, r4
+ 3d0:	d1fb      	bne.n	3ca <memset+0x82>
+ 3d2:	bcf0      	pop	{r4, r5, r6, r7}
+ 3d4:	4770      	bx	lr
+ 3d6:	4614      	mov	r4, r2
+ 3d8:	4603      	mov	r3, r0
+ 3da:	e7c6      	b.n	36a <memset+0x22>
+
+000003dc <memcpy>:
+ 3dc:	4684      	mov	ip, r0
+ 3de:	ea41 0300 	orr.w	r3, r1, r0
+ 3e2:	f013 0303 	ands.w	r3, r3, #3
+ 3e6:	d16d      	bne.n	4c4 <memcpy+0xe8>
+ 3e8:	3a40      	subs	r2, #64	; 0x40
+ 3ea:	d341      	bcc.n	470 <memcpy+0x94>
+ 3ec:	f851 3b04 	ldr.w	r3, [r1], #4
+ 3f0:	f840 3b04 	str.w	r3, [r0], #4
+ 3f4:	f851 3b04 	ldr.w	r3, [r1], #4
+ 3f8:	f840 3b04 	str.w	r3, [r0], #4
+ 3fc:	f851 3b04 	ldr.w	r3, [r1], #4
+ 400:	f840 3b04 	str.w	r3, [r0], #4
+ 404:	f851 3b04 	ldr.w	r3, [r1], #4
+ 408:	f840 3b04 	str.w	r3, [r0], #4
+ 40c:	f851 3b04 	ldr.w	r3, [r1], #4
+ 410:	f840 3b04 	str.w	r3, [r0], #4
+ 414:	f851 3b04 	ldr.w	r3, [r1], #4
+ 418:	f840 3b04 	str.w	r3, [r0], #4
+ 41c:	f851 3b04 	ldr.w	r3, [r1], #4
+ 420:	f840 3b04 	str.w	r3, [r0], #4
+ 424:	f851 3b04 	ldr.w	r3, [r1], #4
+ 428:	f840 3b04 	str.w	r3, [r0], #4
+ 42c:	f851 3b04 	ldr.w	r3, [r1], #4
+ 430:	f840 3b04 	str.w	r3, [r0], #4
+ 434:	f851 3b04 	ldr.w	r3, [r1], #4
+ 438:	f840 3b04 	str.w	r3, [r0], #4
+ 43c:	f851 3b04 	ldr.w	r3, [r1], #4
+ 440:	f840 3b04 	str.w	r3, [r0], #4
+ 444:	f851 3b04 	ldr.w	r3, [r1], #4
+ 448:	f840 3b04 	str.w	r3, [r0], #4
+ 44c:	f851 3b04 	ldr.w	r3, [r1], #4
+ 450:	f840 3b04 	str.w	r3, [r0], #4
+ 454:	f851 3b04 	ldr.w	r3, [r1], #4
+ 458:	f840 3b04 	str.w	r3, [r0], #4
+ 45c:	f851 3b04 	ldr.w	r3, [r1], #4
+ 460:	f840 3b04 	str.w	r3, [r0], #4
+ 464:	f851 3b04 	ldr.w	r3, [r1], #4
+ 468:	f840 3b04 	str.w	r3, [r0], #4
+ 46c:	3a40      	subs	r2, #64	; 0x40
+ 46e:	d2bd      	bcs.n	3ec <memcpy+0x10>
+ 470:	3230      	adds	r2, #48	; 0x30
+ 472:	d311      	bcc.n	498 <memcpy+0xbc>
+ 474:	f851 3b04 	ldr.w	r3, [r1], #4
+ 478:	f840 3b04 	str.w	r3, [r0], #4
+ 47c:	f851 3b04 	ldr.w	r3, [r1], #4
+ 480:	f840 3b04 	str.w	r3, [r0], #4
+ 484:	f851 3b04 	ldr.w	r3, [r1], #4
+ 488:	f840 3b04 	str.w	r3, [r0], #4
+ 48c:	f851 3b04 	ldr.w	r3, [r1], #4
+ 490:	f840 3b04 	str.w	r3, [r0], #4
+ 494:	3a10      	subs	r2, #16
+ 496:	d2ed      	bcs.n	474 <memcpy+0x98>
+ 498:	320c      	adds	r2, #12
+ 49a:	d305      	bcc.n	4a8 <memcpy+0xcc>
+ 49c:	f851 3b04 	ldr.w	r3, [r1], #4
+ 4a0:	f840 3b04 	str.w	r3, [r0], #4
+ 4a4:	3a04      	subs	r2, #4
+ 4a6:	d2f9      	bcs.n	49c <memcpy+0xc0>
+ 4a8:	3204      	adds	r2, #4
+ 4aa:	d008      	beq.n	4be <memcpy+0xe2>
+ 4ac:	07d2      	lsls	r2, r2, #31
+ 4ae:	bf1c      	itt	ne
+ 4b0:	f811 3b01 	ldrbne.w	r3, [r1], #1
+ 4b4:	f800 3b01 	strbne.w	r3, [r0], #1
+ 4b8:	d301      	bcc.n	4be <memcpy+0xe2>
+ 4ba:	880b      	ldrh	r3, [r1, #0]
+ 4bc:	8003      	strh	r3, [r0, #0]
+ 4be:	4660      	mov	r0, ip
+ 4c0:	4770      	bx	lr
+ 4c2:	bf00      	nop
+ 4c4:	2a08      	cmp	r2, #8
+ 4c6:	d313      	bcc.n	4f0 <memcpy+0x114>
+ 4c8:	078b      	lsls	r3, r1, #30
+ 4ca:	d08d      	beq.n	3e8 <memcpy+0xc>
+ 4cc:	f010 0303 	ands.w	r3, r0, #3
+ 4d0:	d08a      	beq.n	3e8 <memcpy+0xc>
+ 4d2:	f1c3 0304 	rsb	r3, r3, #4
+ 4d6:	1ad2      	subs	r2, r2, r3
+ 4d8:	07db      	lsls	r3, r3, #31
+ 4da:	bf1c      	itt	ne
+ 4dc:	f811 3b01 	ldrbne.w	r3, [r1], #1
+ 4e0:	f800 3b01 	strbne.w	r3, [r0], #1
+ 4e4:	d380      	bcc.n	3e8 <memcpy+0xc>
+ 4e6:	f831 3b02 	ldrh.w	r3, [r1], #2
+ 4ea:	f820 3b02 	strh.w	r3, [r0], #2
+ 4ee:	e77b      	b.n	3e8 <memcpy+0xc>
+ 4f0:	3a04      	subs	r2, #4
+ 4f2:	d3d9      	bcc.n	4a8 <memcpy+0xcc>
+ 4f4:	3a01      	subs	r2, #1
+ 4f6:	f811 3b01 	ldrb.w	r3, [r1], #1
+ 4fa:	f800 3b01 	strb.w	r3, [r0], #1
+ 4fe:	d2f9      	bcs.n	4f4 <memcpy+0x118>
+ 500:	780b      	ldrb	r3, [r1, #0]
+ 502:	7003      	strb	r3, [r0, #0]
+ 504:	784b      	ldrb	r3, [r1, #1]
+ 506:	7043      	strb	r3, [r0, #1]
+ 508:	788b      	ldrb	r3, [r1, #2]
+ 50a:	7083      	strb	r3, [r0, #2]
+ 50c:	4660      	mov	r0, ip
+ 50e:	4770      	bx	lr
