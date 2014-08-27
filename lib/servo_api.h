@@ -34,10 +34,10 @@
 #define SERVO_API_H
 	#include "servo_api.h"
 #endif
-#ifndef SERVO_API_H
-#define SERVO_API_H
-	#include "servo_api.c"
-#endif
+// #ifndef SERVO_API_H
+// #define SERVO_API_H
+// 	#include "servo_api.c"
+// #endif
 
 /*  Definitions       */
 #define PWM_FREQUENCY   50
@@ -48,25 +48,25 @@
     -Time for min PWM servo (us)   MG995=500  &  HS422=800 
 */
 
-#define MAX_SERVO_0     2300        
+#define MAX_SERVO_0     2000        
 #define MIN_SERVO_0      800
 
-#define MAX_SERVO_1     2300        
+#define MAX_SERVO_1     2000        
 #define MIN_SERVO_1      800 
 
-#define MAX_SERVO_2     2300        
+#define MAX_SERVO_2     2000        
 #define MIN_SERVO_2      800 
 
-#define MAX_SERVO_3     2300        
+#define MAX_SERVO_3     2000        
 #define MIN_SERVO_3      800 
 
-#define MAX_SERVO_4     2300        
+#define MAX_SERVO_4     2000        
 #define MIN_SERVO_4      800 
 
-#define MAX_SERVO_5     2300        
+#define MAX_SERVO_5     2000        
 #define MIN_SERVO_5      800 
 
-#define MAX_SERVO_5     2300        
+#define MAX_SERVO_5     2000        
 #define MIN_SERVO_5      800           
 //#define DEBUG_SERVO
 

@@ -44,7 +44,7 @@
 #include "driverlib/pin_map.h"
 #include "inc/hw_gpio.h"
 #include "driverlib/rom.h"
-
+#include "servo_api.h"
 /*  Global variables  */
 volatile uint32_t Cperiod, 
                   IntervalDuty[6], 
@@ -53,19 +53,7 @@ volatile uint32_t Cperiod,
                   min_c[6],
                   max_c[6];
 
-volatile uint16_t servo_times[]={ 
-                                 MAX_SERVO_0,
-                                 MIN_SERVO_0,
-                                 MAX_SERVO_1,
-                                 MIN_SERVO_1,
-                                 MAX_SERVO_2,
-                                 MIN_SERVO_2,
-                                 MAX_SERVO_3,
-                                 MIN_SERVO_3,
-                                 MAX_SERVO_4,
-                                 MIN_SERVO_4,
-                                 MAX_SERVO_5,
-                                 MIN_SERVO_5};
+volatile uint16_t servo_times[12];
 
 void SendServo(uint8_t SelServo,uint8_t ValServo)
 {  
@@ -235,26 +223,52 @@ void CfgModPWM()
 
 void CalcServo()
 {  
-  uint8_t i;
+  uint8_t i,j;
 
-  for(i=0;i<5;i++) 
+  for(i=0,j=0;i<=5;i++,j+2) 
   {
-    max_c[i] = (Cperiod*servo_times[i])/PWM_PERIOD;
-    min_c[i] = (Cperiod*servo_times[i+1])/PWM_PERIOD;
+    max_c[i] = (Cperiod*servo_times[j])/PWM_PERIOD;
+    min_c[i] = (Cperiod*servo_times[j+1])/PWM_PERIOD;
     IntervalDuty[i]=(max_c[i]-min_c[i]);
+    #ifdef DEBUG_SERVO
+      UARTprintf("\nServo:%d,Max:%d",i,max_c[i]);
+      UARTprintf("\nMAX_DEFINE:%d",servo_times[j]);
+      UARTprintf("\nServo:%d,Min:%d",i,min_c[i]);
+      UARTprintf("\nMIN_DEFINE:%d",servo_times[j+1]);   
+      UARTprintf("\nInterval duty:%d",IntervalDuty[i]);
+    #endif
     degree[i] = (IntervalDuty[i]/180);
+    j=(j+2);
   }
 } 
 
 void InitServo()
 {
     uint8_t i;
+    servo_times[0]=MAX_SERVO_0;
+    servo_times[1]=MIN_SERVO_0;
+
+    servo_times[2]=MAX_SERVO_1;
+    servo_times[3]=MIN_SERVO_1;
+    
+    servo_times[4]=MAX_SERVO_2;
+    servo_times[5]=MIN_SERVO_2;
+    
+    servo_times[6]=MAX_SERVO_3;
+    servo_times[7]=MIN_SERVO_3;
+
+    servo_times[8]=MAX_SERVO_4;
+    servo_times[9]=MIN_SERVO_4;
+
+    servo_times[10]=MAX_SERVO_5;
+    servo_times[11]=MIN_SERVO_5;
+
     CfgModPWM();
     CalcServo();
-    for(i=0;i<5;i++) SendServo(i,0);
+    for(i=0;i<=5;i++) SendServo(i,0);
 }
 
-/*********************************************************************************USED TO DEBUG THE MOTORS*********************************************************************************/
+/*********************************************************************************USED TO DEBUG THE MOTORS THROUGH UART*********************************************************************************/
 // void CfgModUART()
 // {
 //   SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
