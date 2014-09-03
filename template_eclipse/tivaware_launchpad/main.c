@@ -19,6 +19,9 @@
 #include <servo_api.c>
 //#include <lcd_api.h>
 
+//Defines
+#define CHAR_SEND 13
+
 /*  Global variables  */
 volatile uint32_t CharUART;
 volatile uint8_t  CharSel[3]={'000'},CharVal[3]={'000'},inc=0,aux_sel,aux_val;
@@ -47,7 +50,7 @@ void UARTIntHandler(void)
   while(UARTCharsAvail(UART0_BASE)) //loop while there are chars
   {
     CharUART=UARTCharGet(UART0_BASE);
-    if((CharUART>=48 && CharUART<=57)||CharUART == 32 || CharUART == 13)
+    if((CharUART>=48 && CharUART<=57)||CharUART == 32 || CharUART == CHAR_SEND)
     {
       UARTprintf("%c",CharUART);
       if(CharUART == 32)
@@ -73,7 +76,7 @@ void UARTIntHandler(void)
         inc = 0;
         sel = 1;
       }
-      else  if(CharUART != 13)
+      else  if(CharUART != CHAR_SEND)
             {
               if(!sel)
               {
@@ -142,7 +145,8 @@ void UARTIntHandler(void)
     }
     else
     {
-      UARTprintf("\nCaracter Invalido");
+      UARTprintf("\nCaracter Invalido-");
+      UARTprintf("%d",CharUART);
       RefreshUART = 0;
     }
     // //echo character
@@ -230,26 +234,26 @@ int main(void)
   //lcd_string("Teste");
   while(1)
   {
-	  delay_ms(5);
-	  SendServo(servo,variable);
-	  if(!flag_1)
-		  if(variable < 180) variable++;
-		  else flag_1 = 1;
-	  else
-		  if(variable > 0) variable--;
-		  else
-			  {
-			  	  flag_1 = 0;
-			  	  if(servo < 5)	servo++;
-			  	  else servo = 0;
-			  }
+//	   delay_ms(5);
+//	   SendServo(servo,variable);
+//	   if(!flag_1)
+//		   if(variable < 180) variable++;
+//		   else flag_1 = 1;
+//	   else
+//		   if(variable > 0) variable--;
+//		   else
+//			   {
+//			   	  flag_1 = 0;
+//			   	  if(servo < 5)	servo++;
+//			   	  else servo = 0;
+//			   }
 
 
-//    if(!RefreshUART)
-//    {
-//      RefreshUART = 1;
-//      UARTprintf("\n[Servo(0-5),Position(0-180)]:");
-//    }
+    if(!RefreshUART)
+    {
+      RefreshUART = 1;
+      UARTprintf("\n[Servo(0-5),Position(0-180)]:");
+    }
   }
 }
 
