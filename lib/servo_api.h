@@ -48,25 +48,25 @@
     -Time for min PWM servo (us)   MG995=500  &  HS422=800 
 */
 
-#define MAX_SERVO_0     1900
-#define MIN_SERVO_0      500
+#define MAX_SERVO_0     2100
+#define MIN_SERVO_0      700
 
-#define MAX_SERVO_1     1900
+#define MAX_SERVO_1     2100
 #define MIN_SERVO_1      500
 
-#define MAX_SERVO_2     1900
+#define MAX_SERVO_2     2100
 #define MIN_SERVO_2      500
 
-#define MAX_SERVO_3     1900
+#define MAX_SERVO_3     2100
 #define MIN_SERVO_3      500
 
-#define MAX_SERVO_4     1900
+#define MAX_SERVO_4     2100
 #define MIN_SERVO_4      500
 
-#define MAX_SERVO_5     1900
+#define MAX_SERVO_5     2100
 #define MIN_SERVO_5      500
 
-#define MAX_SERVO_5     1900
+#define MAX_SERVO_5     2300
 #define MIN_SERVO_5      500
 //#define DEBUG_SERVO
 
