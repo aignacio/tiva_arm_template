@@ -55,6 +55,19 @@ volatile uint32_t Cperiod,
 
 volatile uint16_t servo_times[12];
 
+/*
+  SendServo - Envia sinal para cada servo motor individualmente
+  
+  Parâmetros de entrada: 
+    -uint8_t SelServo - Seleciona servo a ser controlado (0-5)
+    -uint8_t ValServo - Valor que será enviado para o servo motor (0-180)
+  
+  Parâmetros de saída:
+    -Nenhum
+
+  Protótipo:
+  void SendServo(uint8_t SelServo,uint8_t ValServo)
+*/
 void SendServo(uint8_t SelServo,uint8_t ValServo)
 {  
   #ifdef DEBUG_SERVO
@@ -163,6 +176,18 @@ void SendServo(uint8_t SelServo,uint8_t ValServo)
   //delay_ms(15);
 }
 
+/*
+  CfgModPWM - Configura os canais de PWM dos servo motores
+  
+  Parâmetros de entrada: 
+    -Nenhum
+  
+  Parâmetros de saída:
+    -Nenhum
+    
+  Protótipo:
+  void CfgModPWM()
+*/
 void CfgModPWM()
 { 
   Cperiod=(SysCtlClockGet()/PWM_FREQUENCY);
@@ -221,7 +246,19 @@ void CfgModPWM()
   /*********************CONFIG_PWM_5 && 6*********************************/
 }
 
-void CalcServo()
+/*
+  CalcServo - Configura a resolução de cada canal PWM
+  
+  Parâmetros de entrada: 
+    -Nenhum
+  
+  Parâmetros de saída:
+    -Nenhum
+    
+  Protótipo:
+  void CalcServo()
+*/
+void CalcServo() 
 {  
   uint8_t i,j;
 
@@ -242,6 +279,18 @@ void CalcServo()
   }
 } 
 
+/*
+  InitServo - Inicializa a configuração dos servo motores
+  
+  Parâmetros de entrada: 
+    -Nenhum
+  
+  Parâmetros de saída:
+    -Nenhum
+    
+  Protótipo:
+  void CalcServo()
+*/
 void InitServo()
 {
     uint8_t i;
