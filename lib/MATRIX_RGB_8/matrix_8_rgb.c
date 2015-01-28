@@ -21,7 +21,8 @@ void ClkSSI()
   Arguments: 
   -matrix - Address of matrix to write
   -offset - Used to animate the matrix
-
+  -limit - limit of the matrix that will be
+           written
   Return:
   bool - Return 1 if finish to write (Line == 8)
   else return 0;
@@ -31,13 +32,14 @@ void ClkSSI()
   		return 1.
 *************************************************/
 bool
-SendSSITLC(unsigned char *matrix_t, uint16_t offset)
+SendSSITLC(unsigned char *matrix_t, uint16_t offset,uint16_t limit)
 { 
   uint8_t led = 0;
   //Will be send 8 RGB led color, one color each 
   //time like R(0)-G(0)-B(0)-R(1)-G(1)-B(1)... 
   //because of this, led < 24
   offset += LineCounter * 24; //We need to forward 24 positions to the next line
+  if(offset > limit-1) offset -= limit;
   while (led < 24) 
   {
     uint8_t bit_color = 0x80; 
@@ -59,6 +61,7 @@ SendSSITLC(unsigned char *matrix_t, uint16_t offset)
     led++;
   }
   set_high(BLANK_PORT,BLANK_PIN);
+  set_custom(LINE_PORT,LINE_PINS, 0xF8<<5);
   set_custom(LINE_PORT,LINE_PINS,LineCounter<<5);
   set_high(LAT_PORT,LAT_PIN);
   set_low(LAT_PORT,LAT_PIN);  

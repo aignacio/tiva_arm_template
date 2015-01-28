@@ -18,37 +18,19 @@
 #include <utils/uartstdio.c>
 #include <driverlib/uart.h>
 #include "pattern.h"
-#include "matrix_8_rgb.h"
+#include <matrix_8_rgb.h>
+#include <matrix_8_rgb.c>
 
-#include "driverlib/ssi.h"
+//#include "driverlib/ssi.h"
+#define TIMES_TO_REPEAT_MATRIX 10 //Repeat 10 times until change image in the matrix
 
-#define LINE_PINS       GPIO_PIN_5+GPIO_PIN_6+GPIO_PIN_7
-#define LINE_PORT       GPIO_PORTA_BASE
-
-#define LAT_PIN         GPIO_PIN_5
-#define LAT_PORT        GPIO_PORTE_BASE
-
-#define BLANK_PIN       GPIO_PIN_5
-#define BLANK_PORT      GPIO_PORTB_BASE
-
-#define SCLK_PIN        GPIO_PIN_4
-#define SCLK_PORT       GPIO_PORTB_BASE
-
-#define MOSI_PIN        GPIO_PIN_7
-#define MOSI_PORT       GPIO_PORTB_BASE
-
-#define REPEAT_MATRIX_UNTIL_INCREMENT 10 //Repeat 10 times until change image in the matrix
-
-#define set_high(x,y)     GPIOPinWrite(x,y,y)
-#define set_low(x,y)      GPIOPinWrite(x,y,~(y)) 
-#define set_custom(x,y,z) GPIOPinWrite(x,y,z) 
 
 /*  Global variables  */
 volatile uint32_t CharUART;
 bool              flag = 0;
 
 volatile uint16_t increment_offset=0,
-                  time=0;
+                  times=0;
 volatile uint8_t  repeat_screen=0;
 
 void 
@@ -75,19 +57,26 @@ Timer0IntHandler(void)
 {
   TimerIntClear(TIMER0_BASE, TIMER_TIMB_TIMEOUT);
 
-  //toggle_led();
-  if(increment_offset > 3071) increment_offset -= 3072;
-
-  if(SendSSITLC(pattern, increment_offset))
-   repeat_screen++;
-
-  if(repeat_screen == REPEAT_MATRIX_UNTIL_INCREMENT) 
+  if(times == 1)
   {
-    repeat_screen = 0;
-    increment_offset += 24;
-    if(increment_offset > 3071) 
-      increment_offset = 0;
+    times = 0;
+    //UARTprintf("\nOFFSET:%d",increment_offset);
+    uint8_t offset = increment_offset;
+    if(offset > 3071) offset -= 3072;
+    
+    if(SendSSITLC(pattern, increment_offset,3072))
+     repeat_screen++;
+
+    if(repeat_screen == TIMES_TO_REPEAT_MATRIX) 
+    {
+      repeat_screen = 0;
+      increment_offset += 24;
+      if(increment_offset > 3071)
+        increment_offset = 0;
+    }
   }
+  else
+      times++;
 }
 
 
@@ -109,8 +98,8 @@ toggle_led()
 void 
 CfgClock(void)
 {
-  //SysCtlClockSet(SYSCTL_SYSDIV_5|SYSCTL_USE_PLL|SYSCTL_XTAL_16MHZ|SYSCTL_OSC_MAIN); //40MHz
-  SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
+  SysCtlClockSet(SYSCTL_SYSDIV_5|SYSCTL_USE_PLL|SYSCTL_XTAL_16MHZ|SYSCTL_OSC_MAIN); //40MHz
+  //SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
 }
 
 void 
@@ -119,8 +108,19 @@ delay_ms(long delayms)
     SysCtlDelay( (SysCtlClockGet()/(3*1000))*delayms) ;
 }
 
-void 
-CfgModUART(void)
+/*
+  CfgModUART - Configura serial para recepção de dados por interrupção
+  
+  Parâmetros de entrada: 
+    -Nenhum
+
+  Parâmetros de saída:
+    -Nenhum
+
+  Protótipo:
+  void CfgModUART()
+*/
+void CfgModUART()
 {
   SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
   SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
@@ -163,7 +163,7 @@ CfgModUART(void)
   //
   // Initialize the UART for console I/O.
   //
-  UARTStdioConfig(0, 57600, 16000000);
+  UARTStdioConfig(0, 115200, 16000000);
 
   IntMasterEnable(); //enable processor interrupts
 
@@ -172,13 +172,12 @@ CfgModUART(void)
   UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT); //only enable RX and TX interrupts
 }
 
-
 void 
 CfgTimer()
 {
   SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
   TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);
-  TimerLoadSet(TIMER0_BASE, TIMER_A, SysCtlClockGet()/10); //1second/10=100miliseconds
+  TimerLoadSet(TIMER0_BASE, TIMER_A, SysCtlClockGet()/2); //1second/10=100miliseconds
   IntMasterEnable();
   TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
   IntEnable(INT_TIMER0A);
@@ -195,7 +194,6 @@ main(void)
 
   while(1)
   {
-    //UARTprintf("AT+GMR\n\r");
     //delay_ms(1200);
   };
 }

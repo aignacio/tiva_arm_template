@@ -41,6 +41,6 @@
 #define set_custom(x,y,z) GPIOPinWrite(x,y,z)
 
 void ClkSSI();
-bool SendSSITLC(unsigned char *matrix_t, uint16_t offset);
+bool SendSSITLC(unsigned char *matrix_t, uint16_t offset,uint16_t limit);
 void CfgMatrixPins(void);
 #endif
